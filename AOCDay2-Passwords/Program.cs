@@ -11,20 +11,18 @@ namespace AOCDay2_Passwords
         {
             string input = File.ReadAllText("input.txt");
 
-            MatchCollection matches = Regex.Matches(input, @"(?<min>\d+)\-(?<max>\d+) (?<char>.)\: (?<password>.+)");
+            MatchCollection matches = Regex.Matches(input, @"(?<num1>\d+)\-(?<num2>\d+) (?<char>.)\: (?<password>.+)");
+            var policyPasswordPairs = matches.Select(m => new {
+                Number1 = int.Parse(m.Groups["num1"].Value),
+                Number2 = int.Parse(m.Groups["num2"].Value),
+                Character = m.Groups["char"].Value[0],
+                Password = m.Groups["password"].Value
+            });
 
-            int validCount1 = matches.Where(m => TestPasswordMinMax(int.Parse(m.Groups["min"].Value),
-                                                                    int.Parse(m.Groups["max"].Value), 
-                                                                    m.Groups["char"].Value[0], 
-                                                                    m.Groups["password"].Value)).Count();
+            int validCount1 = policyPasswordPairs.Count(p => TestPasswordMinMax(p.Number1, p.Number2, p.Character, p.Password));
+            int validCount2 = policyPasswordPairs.Count(p => TestPasswordPositionalOccurance(p.Number1, p.Number2, p.Character, p.Password));
 
             Console.WriteLine($"Valid Password Count Using Min Max Test: {validCount1}");
-
-            int validCount2 = matches.Where(m => TestPasswordPositionalOccurance(int.Parse(m.Groups["min"].Value),
-                                                                                 int.Parse(m.Groups["max"].Value),
-                                                                                 m.Groups["char"].Value[0],
-                                                                                 m.Groups["password"].Value)).Count();
-
             Console.WriteLine($"Valid Password Count Using Positional Test: {validCount2}");
         }
 
