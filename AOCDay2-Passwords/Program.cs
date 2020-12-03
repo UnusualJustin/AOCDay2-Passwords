@@ -26,8 +26,6 @@ namespace AOCDay2_Passwords
                                                                                  m.Groups["password"].Value)).Count();
 
             Console.WriteLine($"Valid Password Count Using Positional Test: {validCount2}");
-            Console.WriteLine("Press any key to exit...");
-            Console.ReadKey();
         }
 
         static bool TestPasswordMinMax(int minOccurances, int maxOccurances, char character, string password)
